@@ -1,69 +1,199 @@
-import Image from "next/image";
+import { Suspense } from "react";
+import Link from "next/link";
+import { Show, SignUpButton } from "@clerk/nextjs";
+import {
+  ArrowRightIcon,
+  BarChart3Icon,
+  LayoutDashboardIcon,
+  Link2Icon,
+  MousePointerClickIcon,
+  ShieldCheckIcon,
+  ZapIcon,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
+const features = [
+  {
+    icon: ZapIcon,
+    title: "Instant short links",
+    description:
+      "Paste a long URL and get a clean, shareable short link in seconds.",
+  },
+  {
+    icon: BarChart3Icon,
+    title: "Know what works",
+    description:
+      "See how often your links are opened so you can focus on what performs.",
+  },
+  {
+    icon: LayoutDashboardIcon,
+    title: "One simple dashboard",
+    description:
+      "Create, review, edit, and delete all of your links from a single place.",
+  },
+  {
+    icon: ShieldCheckIcon,
+    title: "Private by default",
+    description:
+      "Your links belong to your account. Only you can see and manage them.",
+  },
+];
+
+const steps = [
+  {
+    icon: Link2Icon,
+    title: "1. Paste your URL",
+    description: "Drop in any long link you want to share.",
+  },
+  {
+    icon: MousePointerClickIcon,
+    title: "2. Get a short link",
+    description: "Pick a custom slug or let us generate one for you.",
+  },
+  {
+    icon: BarChart3Icon,
+    title: "3. Share and track",
+    description: "Send it anywhere and watch the clicks roll in.",
+  },
+];
 
 export default function Home() {
+  const cta = (
+    <Suspense fallback={<div className="h-9" />}>
+      <Show when="signed-out">
+        <SignUpButton>
+          <Button size="lg">
+            Get started for free
+            <ArrowRightIcon data-icon="inline-end" />
+          </Button>
+        </SignUpButton>
+      </Show>
+      <Show when="signed-in">
+        <Button size="lg" nativeButton={false} render={<Link href="/dashboard" />}>
+          Go to dashboard
+          <ArrowRightIcon data-icon="inline-end" />
+        </Button>
+      </Show>
+    </Suspense>
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex flex-1 flex-col">
+      <section className="mx-auto flex w-full max-w-4xl flex-col items-center gap-6 px-6 py-20 text-center sm:py-28">
+        <Badge variant="secondary">
+          <Link2Icon data-icon="inline-start" />
+          Link shortener
+        </Badge>
+        <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
+          Short links, big impact.
+        </h1>
+        <p className="max-w-xl text-lg text-balance text-muted-foreground">
+          Turn long, messy URLs into short links that are easy to share, easy to
+          remember, and easy to track.
+        </p>
+        <div className="flex flex-col items-center gap-3 sm:flex-row">
+          {cta}
+          <Button
+            size="lg"
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="#features" />}
+          >
+            See how it works
+          </Button>
+        </div>
+      </section>
+
+      <Separator />
+
+      <section
+        id="features"
+        className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-6 py-20"
+      >
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            Everything you need to manage links
+          </h2>
+          <p className="max-w-xl text-muted-foreground">
+            A focused toolset that keeps sharing simple.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {features.map((feature) => (
+            <Card key={feature.title}>
+              <CardHeader>
+                <feature.icon className="text-primary" />
+                <CardTitle>{feature.title}</CardTitle>
+                <CardDescription>{feature.description}</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+      <Separator />
+
+      <section className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-6 py-20">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <h2 className="text-3xl font-semibold tracking-tight">
+            Up and running in three steps
+          </h2>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          {steps.map((step) => (
+            <Card key={step.title}>
+              <CardHeader>
+                <step.icon className="text-primary" />
+                <CardTitle>{step.title}</CardTitle>
+                <CardDescription>{step.description}</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-4xl px-6 pb-24">
+        <Card className="bg-primary text-primary-foreground">
+          <CardContent className="flex flex-col items-center gap-4 py-8 text-center">
+            <h2 className="text-3xl font-semibold tracking-tight">
+              Ready to shorten your first link?
+            </h2>
+            <p className="max-w-md text-primary-foreground/80">
+              Create a free account and start sharing cleaner links today.
+            </p>
+            <Suspense fallback={<div className="h-9" />}>
+              <Show when="signed-out">
+                <SignUpButton>
+                  <Button size="lg" variant="secondary">
+                    Create your account
+                    <ArrowRightIcon data-icon="inline-end" />
+                  </Button>
+                </SignUpButton>
+              </Show>
+              <Show when="signed-in">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  nativeButton={false}
+                  render={<Link href="/dashboard" />}
+                >
+                  Go to dashboard
+                  <ArrowRightIcon data-icon="inline-end" />
+                </Button>
+              </Show>
+            </Suspense>
+          </CardContent>
+        </Card>
+      </section>
+    </main>
   );
 }
