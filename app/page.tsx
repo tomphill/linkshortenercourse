@@ -70,7 +70,7 @@ export default function Home() {
   const cta = (
     <Suspense fallback={<div className="h-9" />}>
       <Show when="signed-out">
-        <SignUpButton>
+        <SignUpButton mode="modal">
           <Button size="lg">
             Get started for free
             <ArrowRightIcon data-icon="inline-end" />
@@ -172,7 +172,7 @@ export default function Home() {
             </p>
             <Suspense fallback={<div className="h-9" />}>
               <Show when="signed-out">
-                <SignUpButton>
+                <SignUpButton mode="modal">
                   <Button size="lg" variant="secondary">
                     Create your account
                     <ArrowRightIcon data-icon="inline-end" />
