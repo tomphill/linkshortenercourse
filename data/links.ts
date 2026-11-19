@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, gt, isNull, or } from "drizzle-orm";
 import { db } from "@/db";
 import { linksTable, type Link } from "@/db/schema";
 
@@ -46,6 +46,24 @@ export async function deleteLink(userId: string, id: number): Promise<boolean> {
     .where(and(eq(linksTable.id, id), eq(linksTable.userId, userId)))
     .returning({ id: linksTable.id });
   return deleted.length > 0;
+}
+
+export async function getRedirectTargetBySlug(
+  slug: string,
+): Promise<string | null> {
+  const [link] = await db
+    .select({ originalUrl: linksTable.originalUrl })
+    .from(linksTable)
+    .where(
+      and(
+        eq(linksTable.slug, slug),
+        eq(linksTable.isActive, true),
+        or(isNull(linksTable.expiresAt), gt(linksTable.expiresAt, new Date())),
+      ),
+    )
+    .limit(1);
+
+  return link?.originalUrl ?? null;
 }
 
 export function isUniqueViolation(error: unknown): boolean {
